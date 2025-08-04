@@ -39,7 +39,7 @@ function pickRandom() {
 function speak(text) {
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'en-US';
-    utter.rate = 0.7; // 느린 속도
+    utter.rate = 0.5; // 느린 속도
     utter.pitch = 1.1; // 약간 밝은 느낌
     // 뉴욕식(미국 동부) 여성 목소리 우선 선택
     const voices = window.speechSynthesis.getVoices();
