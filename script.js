@@ -1,34 +1,35 @@
 const alphabet = Array.from({length: 26}, (_, i) => String.fromCharCode(65 + i));
 let currentAnswer = '';
+let step = 0; // 0: 알파벳 문제, 1: 단어/이미지 보기
 
 // 알파벳별 대표 단어와 이미지 (이미지는 무료 이미지 주소 사용)
 const alphabetData = {
-    A: { word: 'Apple', img: 'https://cdn.pixabay.com/photo/2014/02/01/17/28/apple-256261_1280.jpg' },
-    B: { word: 'Bear', img: 'https://cdn.pixabay.com/photo/2016/11/29/09/32/animal-1867121_1280.jpg' },
-    C: { word: 'Cat', img: 'https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg' },
-    D: { word: 'Dog', img: 'https://cdn.pixabay.com/photo/2016/02/19/10/00/dog-1207816_1280.jpg' },
-    E: { word: 'Elephant', img: 'https://cdn.pixabay.com/photo/2017/01/06/19/15/elephant-1958426_1280.jpg' },
-    F: { word: 'Fish', img: 'https://cdn.pixabay.com/photo/2016/03/05/19/02/fish-1232733_1280.jpg' },
-    G: { word: 'Giraffe', img: 'https://cdn.pixabay.com/photo/2013/07/18/10/56/giraffe-163835_1280.jpg' },
-    H: { word: 'Horse', img: 'https://cdn.pixabay.com/photo/2017/01/20/00/30/horse-1995595_1280.jpg' },
-    I: { word: 'Ice cream', img: 'https://cdn.pixabay.com/photo/2017/06/10/07/18/ice-cream-2382017_1280.jpg' },
-    J: { word: 'Juice', img: 'https://cdn.pixabay.com/photo/2017/01/20/15/06/orange-1995056_1280.jpg' },
-    K: { word: 'Kangaroo', img: 'https://cdn.pixabay.com/photo/2017/01/06/19/15/kangaroo-1958430_1280.jpg' },
-    L: { word: 'Lion', img: 'https://cdn.pixabay.com/photo/2017/01/06/19/15/lion-1958432_1280.jpg' },
-    M: { word: 'Monkey', img: 'https://cdn.pixabay.com/photo/2016/11/29/09/32/animal-1867122_1280.jpg' },
-    N: { word: 'Nest', img: 'https://cdn.pixabay.com/photo/2016/03/27/19/40/bird-nest-1283765_1280.jpg' },
-    O: { word: 'Owl', img: 'https://cdn.pixabay.com/photo/2016/11/29/09/32/owl-1867123_1280.jpg' },
-    P: { word: 'Penguin', img: 'https://cdn.pixabay.com/photo/2016/11/29/09/32/penguin-1867124_1280.jpg' },
-    Q: { word: 'Queen', img: 'https://cdn.pixabay.com/photo/2017/01/31/13/14/crown-2022168_1280.png' },
-    R: { word: 'Rabbit', img: 'https://cdn.pixabay.com/photo/2017/01/06/19/15/rabbit-1958433_1280.jpg' },
-    S: { word: 'Sun', img: 'https://cdn.pixabay.com/photo/2012/04/13/00/22/sun-31223_1280.png' },
-    T: { word: 'Tiger', img: 'https://cdn.pixabay.com/photo/2017/01/06/19/15/tiger-1958434_1280.jpg' },
-    U: { word: 'Umbrella', img: 'https://cdn.pixabay.com/photo/2014/04/03/10/32/umbrella-312563_1280.png' },
-    V: { word: 'Violin', img: 'https://cdn.pixabay.com/photo/2014/12/21/23/50/violin-579483_1280.png' },
-    W: { word: 'Whale', img: 'https://cdn.pixabay.com/photo/2017/01/06/19/15/whale-1958435_1280.jpg' },
-    X: { word: 'Xylophone', img: 'https://cdn.pixabay.com/photo/2016/03/31/19/56/xylophone-1290092_1280.png' },
-    Y: { word: 'Yak', img: 'https://cdn.pixabay.com/photo/2017/01/06/19/15/yak-1958436_1280.jpg' },
-    Z: { word: 'Zebra', img: 'https://cdn.pixabay.com/photo/2017/01/06/19/15/zebra-1958437_1280.jpg' }
+    A: { word: 'Apple', emoji: '🍎' },
+    B: { word: 'Bear', emoji: '🐻' },
+    C: { word: 'Cat', emoji: '🐱' },
+    D: { word: 'Dog', emoji: '🐶' },
+    E: { word: 'Elephant', emoji: '🐘' },
+    F: { word: 'Fish', emoji: '🐟' },
+    G: { word: 'Giraffe', emoji: '🦒' },
+    H: { word: 'Horse', emoji: '🐴' },
+    I: { word: 'Ice cream', emoji: '🍦' },
+    J: { word: 'Juice', emoji: '🧃' },
+    K: { word: 'Kangaroo', emoji: '🦘' },
+    L: { word: 'Lion', emoji: '🦁' },
+    M: { word: 'Monkey', emoji: '🐵' },
+    N: { word: 'Nest', emoji: '🪺' },
+    O: { word: 'Owl', emoji: '🦉' },
+    P: { word: 'Penguin', emoji: '🐧' },
+    Q: { word: 'Queen', emoji: '👸' },
+    R: { word: 'Rabbit', emoji: '🐰' },
+    S: { word: 'Sun', emoji: '☀️' },
+    T: { word: 'Tiger', emoji: '🐯' },
+    U: { word: 'Umbrella', emoji: '☂️' },
+    V: { word: 'Violin', emoji: '🎻' },
+    W: { word: 'Whale', emoji: '🐋' },
+    X: { word: 'Xylophone', emoji: '🎼' },
+    Y: { word: 'Yak', emoji: '🐂' },
+    Z: { word: 'Zebra', emoji: '🦓' }
 };
 
 function pickRandom() {
@@ -44,27 +45,60 @@ function speak(text) {
 function showQuestion() {
     currentAnswer = pickRandom();
     document.getElementById('question').textContent = currentAnswer;
-    document.getElementById('nextBtn').disabled = true;
-    // 단어/이미지 숨기기
+    document.getElementById('nextBtn').disabled = false;
+    document.getElementById('answerBtn').disabled = false;
     document.getElementById('wordArea').style.display = 'none';
+    step = 0;
 }
 
+
 document.getElementById('answerBtn').onclick = function() {
-    const data = alphabetData[currentAnswer];
-    if (data) {
-        document.getElementById('wordImg').src = data.img;
-        document.getElementById('wordImg').alt = data.word;
-        document.getElementById('wordText').textContent = data.word;
-        document.getElementById('wordArea').style.display = 'flex';
-        speak(currentAnswer + '. ' + data.word);
-    } else {
-        document.getElementById('wordArea').style.display = 'none';
+    if (step === 0) {
         speak(currentAnswer);
+        document.getElementById('answerBtn').disabled = true;
+        step = 1;
     }
-    document.getElementById('nextBtn').disabled = false;
 };
 
-document.getElementById('nextBtn').onclick = showQuestion;
+
+document.getElementById('nextBtn').onclick = function() {
+    if (step === 1) {
+        // 단어/이모지 보여주고 단어 읽어주기
+        const data = alphabetData[currentAnswer];
+        if (data) {
+            // 이미지 대신 이모지 표시
+            const wordImg = document.getElementById('wordImg');
+            wordImg.src = '';
+            wordImg.alt = data.word;
+            wordImg.style.display = 'none';
+            // 이모지용 span 추가/활성화
+            let emojiSpan = document.getElementById('emojiSpan');
+            if (!emojiSpan) {
+                emojiSpan = document.createElement('span');
+                emojiSpan.id = 'emojiSpan';
+                emojiSpan.style.fontSize = '4.5rem';
+                emojiSpan.style.display = 'block';
+                emojiSpan.style.marginBottom = '8px';
+                document.getElementById('wordArea').insertBefore(emojiSpan, wordImg);
+            }
+            emojiSpan.textContent = data.emoji;
+            emojiSpan.style.display = 'block';
+            document.getElementById('wordText').textContent = data.word;
+            document.getElementById('wordArea').style.display = 'flex';
+            speak(data.word);
+        } else {
+            document.getElementById('wordArea').style.display = 'none';
+        }
+        document.getElementById('answerBtn').disabled = true;
+        step = 2;
+    } else if (step === 2) {
+        // 다음 문제로 이동
+        // 이모지 span 숨기기
+        let emojiSpan = document.getElementById('emojiSpan');
+        if (emojiSpan) emojiSpan.style.display = 'none';
+        showQuestion();
+    }
+};
 
 // 첫 문제 표시
 showQuestion();
