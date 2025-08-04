@@ -39,7 +39,32 @@ function pickRandom() {
 function speak(text) {
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'en-US';
-    window.speechSynthesis.speak(utter);
+    utter.rate = 0.7; // 느린 속도
+    utter.pitch = 1.1; // 약간 밝은 느낌
+    // 뉴욕식(미국 동부) 여성 목소리 우선 선택
+    const voices = window.speechSynthesis.getVoices();
+    // 뉴욕식은 직접 지정 불가, 미국 여성(유아 친화적) 우선
+    let nyVoice = voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('female'))
+        || voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('samantha'))
+        || voices.find(v => v.lang === 'en-US' && v.gender === 'female')
+        || voices.find(v => v.lang === 'en-US');
+    if (nyVoice) utter.voice = nyVoice;
+    // 일부 브라우저는 getVoices()가 비동기로 동작하므로, voiceschanged 이벤트 활용
+    if (!nyVoice && typeof speechSynthesis !== 'undefined') {
+        window.speechSynthesis.onvoiceschanged = () => {
+            const voices2 = window.speechSynthesis.getVoices();
+            let nyVoice2 = voices2.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('female'))
+                || voices2.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('samantha'))
+                || voices2.find(v => v.lang === 'en-US' && v.gender === 'female')
+                || voices2.find(v => v.lang === 'en-US');
+            if (nyVoice2) {
+                utter.voice = nyVoice2;
+                window.speechSynthesis.speak(utter);
+            }
+        };
+    } else {
+        window.speechSynthesis.speak(utter);
+    }
 }
 
 function showQuestion() {
