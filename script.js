@@ -51,7 +51,15 @@ function speak(text) {
   if ('speechSynthesis' in window) {
     const utter = new window.SpeechSynthesisUtterance(text);
     utter.lang = 'en-US';
-    utter.rate = 0.5; // 읽는 속도 느리게
+    // 모바일(iOS/Android)에서는 rate를 더 낮게 설정
+    let rate = 0.5;
+    const ua = navigator.userAgent;
+    if (/android/i.test(ua)) {
+      rate = 0.32;
+    } else if (/iphone|ipad|ipod/i.test(ua)) {
+      rate = 0.28;
+    }
+    utter.rate = rate;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utter);
   }
